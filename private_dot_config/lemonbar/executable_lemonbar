@@ -1,0 +1,49 @@
+#!/usr/bin/bash
+
+current_window()
+{
+	echo -n $(xdotool getwindowfocus getwindowname)
+}
+
+datetime()
+{
+	echo -n $(date +"%a %Y-%m-%d %T %Z")
+}
+
+myip()
+{
+	local_ip="$(ip route get 1 | awk -F'src' '{print $2}')"
+	local_ip="${local_ip/uid*}"
+	echo -n $local_ip
+}
+
+getvolume()
+{
+	echo -n $(pulsemixer --get-volume | awk '{print $2}')
+}
+
+cpu_load()
+{
+	echo -n $(uptime | awk '{print $9}' | sed 's/.$//')
+}
+
+cpu_temp()
+{
+	temp_dir=/sys/class/hwmon/hwmon2/temp1_input
+	deg="$(($(< "$temp_dir") * 100 / 10000))" 
+	deg="${deg/${deg: -1}}.${deg: -1}°C"
+	echo -n $deg
+}
+
+amdgpu_temp()
+{
+        temp_dir=/sys/class/hwmon/hwmon4/temp1_input
+        deg="$(($(< "$temp_dir") * 100 / 10000))"
+        deg="${deg/${deg: -1}}.${deg: -1}°C"
+        echo -n $deg
+}
+
+while true; do
+        echo "$(current_window)%{r}GPU: $(amdgpu_temp) | CPU: $(cpu_temp) | $(cpu_load) | vol: $(getvolume)% | ip: $(myip) | $(datetime)"
+        sleep 1
+done
