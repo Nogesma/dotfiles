@@ -24,6 +24,7 @@ bspc rule -a Screenkey manage=off
 # Use wmname to display content of java applications
 wmname LG3D
 
-# Start lemonbar
+# Stop and restart lemonbar
 pkill -x lemonbar > /dev/null
-$HOME/.config/lemonbar/lemonbar | lemonbar -p -f 'Jetbrains Mono' -f 'Font Awesome 6 Free Solid' | sh &
+pkill -x lemonbar.sh > /dev/null
+$HOME/.config/lemonbar/lemonbar.sh | lemonbar -p -f 'Jetbrains Mono' -f 'Font Awesome 6 Free Solid' | $HOME/.config/lemonbar/exec_cmd.sh &

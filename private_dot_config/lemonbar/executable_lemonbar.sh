@@ -19,17 +19,17 @@ myip()
 
 getvolume()
 {
-	vol=$(pulsemixer --get-mute)
-	if [ "$vol" = "0" ];
+	vol=$(pamixer --get-mute)
+	if [ "$vol" = "false" ];
 	then
-		vol=$(pulsemixer --get-volume | awk '{print $2}')
+		vol=$(pamixer --get-volume)
 	else
 		vol=0
 	fi
 	printf	'%s' \
-		"%{A4:pulsemixer --change-volume +1:}" \
-		"%{A5:pulsemixer --change-volume -1:}" \
-		"%{A1:pulsemixer --toggle-mute:}" \
+		"%{A4:pamixer -i 1:}" \
+		"%{A5:pamixer -d 1:}" \
+		"%{A1:pamixer -t:}" \
 		" vol:$vol% " \
 		"%{A}%{A}%{A}"
 }
@@ -86,12 +86,23 @@ current_playing()
 	fi	
 }
 
+print_bar()
+{
+	printf  '%s' \
+                "$(current_window) |" \
+                " $(current_playing)" \
+                "%{r}" \
+                "GPU: $(amdgpu_temp) | CPU: $(cpu_temp) | $(cpu_load) |" \
+                "$(getvolume)|$(media_control)| ip:$(myip)| $(datetime)"
+}
+
+# Traps SIGUSR to force refresh the bar, with minimum refresh rate of 1/s
+# Used to refresh on actions
+pid=
+trap '[[ $pid ]] && kill "$pid"' SIGUSR1
+
 while true; do
-        printf	'%s' \
-		"$(current_window) |" \
-		" $(current_playing)" \
-		"%{r}" \
-		"GPU: $(amdgpu_temp) | CPU: $(cpu_temp) | $(cpu_load) |" \
-		"$(getvolume)|$(media_control)| ip:$(myip)| $(datetime)"
-        sleep 1
+        print_bar
+	sleep 1 & pid=$!
+	wait $!
 done
