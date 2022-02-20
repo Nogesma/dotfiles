@@ -86,6 +86,16 @@ current_playing()
 	fi	
 }
 
+shutdown()
+{
+	printf	'%b' \
+		"%{A:shutdown -h now:}" \
+		"%{A2:reboot:}" \
+		"\uf011" \
+		"%{A}%{A}"
+}
+
+
 print_bar()
 {
 	printf  '%s' \
@@ -93,7 +103,8 @@ print_bar()
                 " $(current_playing)" \
                 "%{r}" \
                 "GPU: $(amdgpu_temp) | CPU: $(cpu_temp) | $(cpu_load) |" \
-                "$(getvolume)|$(media_control)| ip:$(myip)| $(datetime)"
+                "$(getvolume)|$(media_control)| ip:$(myip)| $(datetime)" \
+		" | $(shutdown)"
 }
 
 # Traps SIGUSR to force refresh the bar, with minimum refresh rate of 1/s

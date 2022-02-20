@@ -27,4 +27,8 @@ wmname LG3D
 # Stop and restart lemonbar
 pkill -x lemonbar > /dev/null
 pkill -x lemonbar.sh > /dev/null
-$HOME/.config/lemonbar/lemonbar.sh | lemonbar -p -f 'Jetbrains Mono' -f 'Font Awesome 6 Free Solid' | $HOME/.config/lemonbar/exec_cmd.sh &
+"$HOME"/.config/lemonbar/lemonbar.sh | lemonbar -p -f 'Jetbrains Mono' -f 'Font Awesome 6 Free Solid' | "$HOME"/.config/lemonbar/exec_cmd.sh &
+
+# Start gnome-keyring
+gnome-keyring-daemon --start
+export SSH_AUTH_SOCK
