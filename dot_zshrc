@@ -1,7 +1,7 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
-export PATH=$HOME/.bin:$PATH
+export PATH=$HOME/.local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
@@ -107,8 +107,16 @@ if test -e "/usr/lib/kitty/shell-integration/kitty.zsh"; then source "/usr/lib/k
 
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+
 alias kd='kitty +kitten diff'
 alias icat="kitty +kitten icat"
 alias gd="git difftool --no-symlinks --dir-diff"
 alias ls='ls --hyperlink=auto --color=tty'
-alias discord='discord --enable-gpu-rasterization'
+alias pcp='rsync -ah --info=progress2'
+export PATH="/usr/lib/ccache/bin/:$PATH"
+source /usr/share/nvm/init-nvm.sh
+alias eldenring-patch='sudo scanmem "-p $(pgrep 'eldenring.exe')" "-c write bytearray 140de8b72 39 8E E3 3B; exit"'
+
+export PIP_REQUIRE_VIRTUALENV=true
+
+neofetch 

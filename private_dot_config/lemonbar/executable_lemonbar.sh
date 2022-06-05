@@ -58,23 +58,17 @@ media_control()
 
 cpu_load()
 {
-	printf '%s' "$(uptime | awk '{print $9}' | sed 's/.$//')"
+	printf '%s' "$(uptime | awk '{print $8}' | sed 's/.$//')"
 }
 
 cpu_temp()
 {
-	temp_dir=/sys/class/hwmon/hwmon2/temp1_input
-	deg="$(($(< "$temp_dir") * 100 / 10000))" 
-	deg="${deg/${deg: -1}}.${deg: -1}°C"
-	printf '%s' "$deg"
+	printf '%s' "$(sensors k10temp-pci-00c3 | grep Tctl | tail --b 10 | xargs)"
 }
 
-amdgpu_temp()
+gpu_temp()
 {
-        temp_dir=/sys/class/hwmon/hwmon4/temp1_input
-        deg="$(($(< "$temp_dir") * 100 / 10000))"
-        deg="${deg/${deg: -1}}.${deg: -1}°C"
-	printf '%s' "$deg"
+	printf '%s°C' "$(nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader,nounits)"
 }
 
 current_playing()
@@ -102,7 +96,7 @@ print_bar()
                 "$(current_window) |" \
                 " $(current_playing)" \
                 "%{r}" \
-                "GPU: $(amdgpu_temp) | CPU: $(cpu_temp) | $(cpu_load) |" \
+                "GPU: $(gpu_temp) | CPU: $(cpu_temp) | $(cpu_load) |" \
                 "$(getvolume)|$(media_control)| ip:$(myip)| $(datetime)" \
 		" | $(shutdown)"
 }
