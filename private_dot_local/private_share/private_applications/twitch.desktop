@@ -1,0 +1,5 @@
+[Desktop Entry]
+Name=Twitch
+Exec=sh -c "cat /home/segransm/.config/twitch/follows | /home/segransm/.local/bin/ditch"
+Icon=/home/segransm/.local/share/ice/icons/Twitch.png
+Type=Application
