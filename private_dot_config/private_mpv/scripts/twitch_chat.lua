@@ -1,5 +1,5 @@
 function getTwitchUser()
-	for w in string.gmatch(mp.get_property("media-title"), "%w+$") do
+	for w in string.gmatch(mp.get_property("media-title"), "[%w_-]+$") do
 		return (w);
 	end
 	
